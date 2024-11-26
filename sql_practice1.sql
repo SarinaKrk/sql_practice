@@ -147,6 +147,19 @@ SELECT *
 FROM Athletes
 WHERE FullName LIKE 'S%';
 
+
+INSERT INTO Athletes (FullName, Gender, DateOfBirth, CountryID) 
+VALUES
+	('Smrgio Ramos', 'Male', '1986-03-30', 4),
+    ('SmNeymar Junior', 'Male', '1992-02-05', 5);
 SELECT *
 FROM Athletes
-WHERE 
+WHERE FullName LIKE '_m%';
+
+SELECT a.AthleteID, a.FullName, a.Gender, a.DateOfBirth, a.CountryID, c.CountryCode, c.CountryName
+FROM Athletes a, Countries c
+WHERE a.CountryID = c.CountryID AND c.CountryCode = 'US';
+
+SELECT *
+FROM Athletes
+WHERE TIMESTAMPDIFF(YEAR, DateOfBirth, CURDATE()) < 25;
