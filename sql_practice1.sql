@@ -120,6 +120,12 @@ INSERT INTO Medals (AthleteID, EventID, MedalType, Year) VALUES
 (505, 6, 'Gold', 2020),
 (506, 6, 'Silver', 2024);
 
+INSERT INTO Medals (AthleteID, EventID, MedalType, Year) VALUES
+(505, 6, 'Silver', 2020),
+(506, 6, 'Bronze', 2024);
+
+UPDATE Medals SET MedalType = 'Gold' WHERE AthleteID = 506 AND MedalType = 'Bronze';
+
 
 SELECT *
 FROM Countries
@@ -143,6 +149,7 @@ VALUES
 	('Sergio Ramos', 'Male', '1986-03-30', 4),
     ('SeNeymar Junior', 'Male', '1992-02-05', 5);
     
+    
 SELECT *
 FROM Athletes
 WHERE FullName LIKE 'S%';
@@ -152,6 +159,11 @@ INSERT INTO Athletes (FullName, Gender, DateOfBirth, CountryID)
 VALUES
 	('Smrgio Ramos', 'Male', '1986-03-30', 4),
     ('SmNeymar Junior', 'Male', '1992-02-05', 5);
+ 
+SELECT * FROM Athletes;
+UPDATE Athletes SET FullName = 'Jamal Musiala' WHERE FullName = 'Smrgio Ramos';  
+UPDATE Athletes SET FullName = 'Vinicius Junior' WHERE FullName = 'SmNeymar Junior';      
+    
 SELECT *
 FROM Athletes
 WHERE FullName LIKE '_m%';
