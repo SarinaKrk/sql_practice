@@ -138,6 +138,10 @@ WHERE Continent = 'Asia' OR Continent = 'North America';
 
 SELECT *
 FROM Countries
+WHERE Continent IN ('Asia', 'North America');
+
+SELECT *
+FROM Countries
 WHERE Continent != 'Asia' AND Continent != 'North America';
 
 SELECT FullName AS 'Athletes Name'
@@ -168,10 +172,51 @@ SELECT *
 FROM Athletes
 WHERE FullName LIKE '_m%';
 
+INSERT INTO Athletes (FullName, Gender, DateOfBirth, CountryID) VALUES
+('Karlah Darlah', 'Female', '2024-11-25', 1),
+('Abel Senoh', 'Male', '2002-11-30', 5),
+('Sarah Noor', 'Female', '2001-02-14', 4);
+
+SELECT *
+FROM Athletes
+WHERE FullName LIKE '%h';
+
+SELECT *
+FROM Athletes
+WHERE FullName LIKE '%h %';
+
 SELECT a.AthleteID, a.FullName, a.Gender, a.DateOfBirth, a.CountryID, c.CountryCode, c.CountryName
 FROM Athletes a, Countries c
 WHERE a.CountryID = c.CountryID AND c.CountryCode = 'US';
 
+
 SELECT *
 FROM Athletes
 WHERE TIMESTAMPDIFF(YEAR, DateOfBirth, CURDATE()) < 25;
+
+INSERT INTO Athletes (FullName, Gender, DateOfBirth, CountryID) VALUES
+('Anna Missler', 'Female', '2012-12-02', 4),
+('Mia Karl', 'Female', '2000-12-07', 1);
+
+SELECT *
+FROM Athletes
+WHERE  DATE_FORMAT(DateOfBirth, '%m-%d') 
+BETWEEN DATE_FORMAT(CURDATE(), '%m-%d') AND DATE_FORMAT(CURDATE() + INTERVAL 7 DAY, '%m-%d');
+
+
+SELECT * FROM Athletes;
+
+DELETE FROM Athletes 
+WHERE AthleteID = (SELECT MAX(AthleteID) FROM (SELECT * FROM Athletes) AS temp);
+
+
+DELETE FROM Athletes
+ORDER BY AthleteID DESC
+LIMIT 1;
+
+WITH LastAthleteID AS (
+    SELECT MAX(AthleteID) AS MaxID
+    FROM Athletes
+)
+DELETE FROM Athletes
+WHERE AthleteID = (SELECT MaxID FROM LastAthleteID);
