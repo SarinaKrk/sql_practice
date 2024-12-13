@@ -17,6 +17,9 @@ VALUES (4, "Jenny Han", "United States of America");
 INSERT INTO Authors
 VALUES (5, "Paulo Coelho", "Brazil"),
 	   (6, "Charles Dickens", "England");
+       
+INSERT INTO Authors
+VALUES (7, "Anna Hanna", "Venezuela");
 
 CREATE TABLE Books (
 	book_id INT PRIMARY KEY,
@@ -84,7 +87,22 @@ VALUES (009, 102, 2222, "2024-12-11", NULL);
 SELECT * FROM Transactions;
 
 
+SELECT b.title, a.author_name
+FROM Authors a
+INNER JOIN Books b
+ON a.author_id = b.author_id;
 
+SELECT br.borrower_name, b.title
+FROM Borrowers br
+INNER JOIN Transactions t
+ON br.borrower_id = t.borrower_id
+INNER JOIN Books b
+ON t.book_id = b.book_id;
+
+SELECT a.author_name,  b.title
+FROM Authors a
+LEFT JOIN Books b
+ON a.author_id = b.author_id;
 
 SELECT author_name "Never Borrowed"
 FROM Authors a
