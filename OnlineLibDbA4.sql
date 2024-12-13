@@ -46,6 +46,9 @@ VALUES (401, "The Summer I Turned Pretty", 4, "Fiction");
 INSERT INTO Books
 VALUES (501, "The Alchemist", 5, "Adventure"),
        (601, "Great Expectations", 6, "Novel");
+       
+DELETE FROM Books
+WHERE author_id IS NULL;
 
 SELECT * FROM Books;
 
@@ -103,6 +106,26 @@ SELECT a.author_name,  b.title
 FROM Authors a
 LEFT JOIN Books b
 ON a.author_id = b.author_id;
+
+SELECT b.title
+FROM Books b
+LEFT JOIN Transactions t
+ON b.book_id = t.book_id
+WHERE t.transaction_id IS NULL;
+
+SELECT br.borrower_name, b.title
+FROM Borrowers br
+INNER JOIN Transactions t
+ON br.borrower_id = t.borrower_id
+INNER JOIN Books b
+ON t.book_id = b.book_id
+WHERE t.return_date IS NULL;
+
+SELECT br.borrower_id, br.borrower_name, COUNT(DISTINCT t.book_id)
+FROM Borrowers br
+INNER JOIN Transactions t
+ON br.borrower_id = t.borrower_id
+GROUP BY t.borrower_id;
 
 SELECT author_name "Never Borrowed"
 FROM Authors a
