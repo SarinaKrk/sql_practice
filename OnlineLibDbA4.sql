@@ -21,6 +21,8 @@ VALUES (5, "Paulo Coelho", "Brazil"),
 INSERT INTO Authors
 VALUES (7, "Anna Hanna", "Venezuela");
 
+SELECT * FROM Authors;
+
 CREATE TABLE Books (
 	book_id INT PRIMARY KEY,
     title VARCHAR(100),
@@ -50,6 +52,10 @@ VALUES (501, "The Alchemist", 5, "Adventure"),
 DELETE FROM Books
 WHERE author_id IS NULL;
 
+UPDATE Books
+SET genre = "Fantasy"
+WHERE book_id = 201;
+
 SELECT * FROM Books;
 
 CREATE TABLE Borrowers (
@@ -63,6 +69,21 @@ VALUES (1111, "Nicole Howard", "2017-01-15"),
 	   (2222, "Ginger Chang", "2020-07-01"),
        (3333, "Mia Norris", "2022-11-22"),
        (4444, "Irene Vanessa Widiaman", "2024-12-01");
+       
+INSERT INTO Borrowers
+VALUES (5555, "Adriana Lima", "2017-01-15", "Brazil");
+       
+SELECT * FROM Borrowers;
+
+ALTER TABLE Borrowers
+ADD coutry VARCHAR(50);
+
+ALTER TABLE Borrowers
+CHANGE coutry country VARCHAR(50);
+
+UPDATE Borrowers 
+SET country = "England"
+WHERE borrower_name = "Irene Vanessa Widiaman";
 
 CREATE TABLE Transactions (
 	transaction_id INT PRIMARY KEY,
@@ -87,7 +108,12 @@ VALUES (001, 101, 1111, "2018-01-01", "2018-07-22"),
 INSERT INTO Transactions
 VALUES (009, 102, 2222, "2024-12-11", NULL);
 
+INSERT INTO Transactions
+VALUES (010, 501, 5555, "2024-12-11", NULL);
+
 SELECT * FROM Transactions;
+
+
 
 
 SELECT b.title, a.author_name
@@ -126,6 +152,49 @@ FROM Borrowers br
 INNER JOIN Transactions t
 ON br.borrower_id = t.borrower_id
 GROUP BY t.borrower_id;
+
+SELECT b.title, a.author_name, br.borrower_name
+FROM Books b
+LEFT JOIN Authors a
+ON b.author_id = a.author_id
+LEFT JOIN Transactions t
+ON b.book_id = t.book_id
+LEFT JOIN Borrowers br
+ON t.borrower_id = br.borrower_id;
+
+
+SELECT b.title, a.author_name,  COUNT(t.transaction_id)
+FROM Books b
+INNER JOIN Authors a
+ON b.author_id = a.author_id
+INNER JOIN Transactions t
+ON b.book_id = t.book_id
+GROUP BY t.book_id
+ORDER BY COUNT(t.transaction_id) DESC
+lIMIT 3;
+
+
+SELECT br.country borrower_country, COUNT(DISTINCT b.book_id), a.country author_country
+FROM Authors a 
+INNER JOIN Books b
+ON a.author_id = b.author_id
+INNER JOIN Transactions t
+ON b.book_id = t.book_id
+INNER JOIN Borrowers br
+ON  t.borrower_id = br.borrower_id
+WHERE br.country = a.country
+GROUP BY br.country;
+
+WITH genre_count AS (
+	SELECT genre, COUNT(DISTINCT t.book_id) AS counts, DENSE_RANK() OVER (ORDER BY COUNT(DISTINCT t.book_id) DESC) AS genre_rank
+	FROM Books b
+	INNER JOIN Transactions t
+	ON b.book_id = t.book_id
+	GROUP BY genre
+)
+SELECT genre, counts
+FROM genre_count
+WHERE genre_rank = 1;
 
 SELECT author_name "Never Borrowed"
 FROM Authors a
